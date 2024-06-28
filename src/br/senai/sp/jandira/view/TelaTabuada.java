@@ -1,7 +1,8 @@
 package br.senai.sp.jandira.view;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class TelaTabuada {
@@ -14,9 +15,8 @@ public class TelaTabuada {
     private JTextField txtMultiplicado = new JTextField();
     private JButton btnCalcular = new JButton("Calcular");
     private JButton btnLimpar = new JButton("Limpar");
-    private JTextArea linhasTabuada = new JTextArea();
-    int peso = 0;
-    double altura = 0.0;
+
+
     private boolean numero1;
 
     public TelaTabuada() {
@@ -28,7 +28,7 @@ public class TelaTabuada {
         this.painelTitulo.setBackground(new Color(0, 0, 0));
         this.painelTitulo.setLayout((LayoutManager)null);
         this.frame.setTitle("A Tabuada");
-        this.frame.setSize(500, 500);
+        this.frame.setSize(550, 650);
         this.frame.setLayout((LayoutManager)null);
         this.frame.setDefaultCloseOperation(2);
         this.labelTitulo.setBounds(150, 25, 1000, 20);
@@ -42,6 +42,18 @@ public class TelaTabuada {
         this.txtMultiplicado.setBounds(10, 170, 250, 25);
         this.btnCalcular.setBounds(10, 200, 130, 30);
         this.btnLimpar.setBounds(145, 200, 130, 30);
+        btnLimpar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                limparTela();
+            }
+        });
+
+
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(3, 123, 528, 305);
+        scrollPane.setFont(new Font("Arial", Font.PLAIN, 14));
+
         this.frame.getContentPane().add(this.labelMultiplicado);
         this.frame.getContentPane().add(this.txtMultiplicado);
         this.frame.getContentPane().add(this.txtNumero);
@@ -50,26 +62,33 @@ public class TelaTabuada {
         this.frame.getContentPane().add(this.painelTitulo);
         this.frame.getContentPane().add(this.btnCalcular);
         this.frame.getContentPane().add(this.btnLimpar);
+        this.frame.getContentPane().add(scrollPane);
         this.frame.setVisible(true);
+
+        private void limparTela() {
+            txtMultiplicando.setText("");
+            txtAreaTabuada.setText("");
+            txtMultiplicando.requestFocus();
+        }
     }
     private void calcularTabuada() {
         try {
-            int mutlipicando = Integer.parseInt(txtMultiplicado.getText());
+            int multiplicando = Integer.parseInt(txtMultiplicando.getText());
             int numero01 = Integer.parseInt(txtNumero.getText());
-
             int contador = 0;
-            criarTabuada.setMultiplicando(mutlipicando);
-            criarTabuada.setNumero1(numero01);
+
+            calculoTabuada.setMultiplicando(multiplicando);
+
+            List<String> linhasTabuada = calculoTabuada.calcularTabuada();
+
+            listModelo.clear();
 
             List<String> listaTabuada = criarTabuada.gerarTabuada();
 
-            for (String linha : listaTabuada) {
-                if (contador < 20) {
-                    txtAreaTabuada1.append(linha + "\n");
-                    contador++;
-                }
+            for (String linha : linhasTabuada) {
+                listModelo.addElement(linha);
             }
-        }catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(
                     null,
                     "Insira um valor válido!",
@@ -77,6 +96,5 @@ public class TelaTabuada {
                     JOptionPane.ERROR_MESSAGE
             );
         }
-
     }
 }
